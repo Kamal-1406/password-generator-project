@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-violet-950 capitalize w-full h-screen flex justify-center items-center">
+    <div
+        class="w-[50%] h-[500px] border-2 border-white rounded-lg text-white flex justify-evenly items-center flex-col p-2">
+        <h1 class="text-2xl font-bold underline">Password generator</h1>
+        <input id="display"
+            class=" text-center  text-3xl py-4 px-6 w-[80%] rounded-md text-black font-semibold border-none outline-none "
+            type="text" placeholder="your password is here">
+
+
+        <div class="flex justify-center items-center space-x-2 mt-4">
+            <button id="generate"
+                class="px-4 py-2 font-bold rounded-md bg-violet-600 border-none outline-none ">Generate</button>
+            <button id="copy" class="px-4 py-2 font-bold rounded-md bg-violet-600 border-none outline-none ">copy to
+                clipboard</button>
+        </div>
+
+
+        <div class=" w-full">
+            <ul class="flex justify-evenly flex-col space-y-4 w-full p-4 font-semibold">
+                <li class="flex justify-between items-center">
+                    <h3><label for="length">password length</label></h3>
+                    <input class="w-20 text-black" type="number" name="" id="lenght">
+                </li>
+                <li class="flex justify-between items-center">
+                    <h3><label for="uppercase">include uppercase letters</label></h3>
+                    <input type="checkbox" name="" id="uppercase" checked>
+                </li>
+                <li class="flex justify-between items-center">
+                    <h3><label for="lowercase">include lowercase letter</label></h3>
+                    <input type="checkbox" name="" id="lowercase">
+                </li>
+                <li class="flex justify-between items-center">
+                    <h3><label for="number">include numbers</label></h3>
+                    <input type="checkbox" name="" id="number">
+                </li>
+                <li class="flex justify-between items-center">
+                    <h3><label for="symbol">include symbols</label></h3>
+                    <input type="checkbox" name="" id="symbol">
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        let lenght = document.getElementById("lenght")
+        let uppercase = document.getElementById("uppercase")
+        let lowercase = document.getElementById("lowercase")
+        let number = document.getElementById("number")
+        let symbol = document.getElementById("symbol")
+        let generateBtn = document.getElementById("generate")
+        let copyBtn = document.getElementById("copy")
+        let display = document.getElementById("display")
+        let uppercaseSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let lowercaseSet = "abcdefghijklmnopqrstuvwxyz";
+        let numberSet = "0123456789";
+        let symbolSet = `!@#$%^&*)_+}{[](}|\:;<>?/.,`;
+        let allChar = uppercaseSet + lowercaseSet + numberSet + symbolSet;
+
+        let RandomData = function (dataset) {
+            return dataset[Math.floor(Math.random() * dataset.length)];
+        }
+        let trimString = function (str, num) {
+            if (str.length > num) {
+                let subStr = str.substring(0, num);
+                return subStr;
+            } else {
+                return str;
+            }
+        }
+
+        generateBtn.addEventListener("click", () => {
+            let generatePassword = function () {
+                let password = "";
+                while (password.length < lenght.value) {
+                    if (uppercase.checked) {
+                        password = password + RandomData(uppercaseSet);
+                    }
+                    if (lowercase.checked) {
+                        password = password + RandomData(lowercaseSet);
+                    }
+                    if (number.checked) {
+                        password = password + RandomData(numberSet);
+                    }
+                    if (symbol.checked) {
+                        password = password + RandomData(symbolSet);
+                    }
+                    if (password.length > lenght.value) {
+                        password = trimString(password, lenght.value)
+                    }
+                    display.value = password;
+                }
+
+            }
+            generatePassword();
+        })
+
+        copyBtn.addEventListener("click", () => {
+            if (display.value != "" || display.value.length >= 1) {
+                navigator.clipboard.writeText(display.value);
+                copyBtn.innerText = "copied";
+            }
+            setTimeout(() => {
+                copyBtn.innerText = "copy to clipboard"
+            }, 2000);
+
+        })
+
+    </script>
+</body>
+
+</html>
